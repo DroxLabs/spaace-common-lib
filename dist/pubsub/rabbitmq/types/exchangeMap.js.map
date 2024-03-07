@@ -1,0 +1,1 @@
+{"version":3,"file":"exchangeMap.js","sourceRoot":"","sources":["../../../../src/pubsub/rabbitmq/types/exchangeMap.ts"],"names":[],"mappings":";;;AAAA,uCAA0C;AAE7B,QAAA,WAAW,GAAG;IACzB,CAAC,mBAAW,CAAC,QAAQ,CAAC,EAAE,mBAAmB;IAC3C,CAAC,mBAAW,CAAC,iBAAiB,CAAC,EAAE,4BAA4B;IAC7D,CAAC,mBAAW,CAAC,YAAY,CAAC,EAAE,uBAAuB;CACpD,CAAC"}
