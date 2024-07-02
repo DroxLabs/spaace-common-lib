@@ -8,4 +8,5 @@ export declare class ArenaSpaaceTweet extends BaseEntity {
     primePost: boolean;
     onboardingPost: boolean;
     communityPost: boolean;
+    adminId: string | null;
 }
