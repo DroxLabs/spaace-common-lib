@@ -46,7 +46,8 @@ export class ArenaSpaaceTweet extends BaseEntity {
   communityPost!: boolean;
 
   @Field(() => String, { nullable: true })
+  @Column('text')
   @ManyToOne(() => ArenaAdmin, { nullable: true })
   @JoinColumn({ name: 'adminId', referencedColumnName: 'twitterId' })
-  adminId!: string | null;
+  adminId!: string;
 }

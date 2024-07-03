@@ -57,9 +57,10 @@ __decorate([
 ], ArenaSpaaceTweet.prototype, "communityPost", void 0);
 __decorate([
     (0, graphql_1.Field)(() => String, { nullable: true }),
+    (0, typeorm_1.Column)('text'),
     (0, typeorm_1.ManyToOne)(() => ArenaAdmin_entity_1.ArenaAdmin, { nullable: true }),
     (0, typeorm_1.JoinColumn)({ name: 'adminId', referencedColumnName: 'twitterId' }),
-    __metadata("design:type", Object)
+    __metadata("design:type", String)
 ], ArenaSpaaceTweet.prototype, "adminId", void 0);
 ArenaSpaaceTweet = __decorate([
     (0, graphql_1.ObjectType)(),
