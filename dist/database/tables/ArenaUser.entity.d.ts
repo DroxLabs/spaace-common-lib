@@ -5,6 +5,7 @@ export declare class ArenaUser extends BaseEntity {
     userTwitterId: string;
     twitterPicture: string;
     name: string | null;
+    email: string | null;
     imageUrl: string | null;
     referralCode: string;
     referralCodeLastShared: Date;
