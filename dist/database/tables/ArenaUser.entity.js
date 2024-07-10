@@ -45,7 +45,7 @@ __decorate([
 ], ArenaUser.prototype, "name", void 0);
 __decorate([
     (0, graphql_1.Field)(() => String, { nullable: true }),
-    (0, typeorm_1.Column)('text', { nullable: true }),
+    (0, typeorm_1.Column)('text', { nullable: true, default: null }),
     __metadata("design:type", Object)
 ], ArenaUser.prototype, "email", void 0);
 __decorate([

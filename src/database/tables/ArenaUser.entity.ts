@@ -36,7 +36,7 @@ export class ArenaUser extends BaseEntity {
   name!: string | null;
 
   @Field(() => String, { nullable: true })
-  @Column('text', { nullable: true })
+  @Column('text', { nullable: true, default: null })
   email!: string | null;
 
   @Field(() => String, { nullable: true })
