@@ -33,6 +33,10 @@ export class ArenaUser extends BaseEntity {
 
   @Field(() => String, { nullable: true })
   @Column('text', { nullable: true })
+  uuid!: string | null;
+
+  @Field(() => String, { nullable: true })
+  @Column('text', { nullable: true })
   name!: string | null;
 
   @Field(() => String, { nullable: true })
