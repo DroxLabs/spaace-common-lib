@@ -41,8 +41,11 @@ class TwitterApiHandler {
     }
     static build(twitterId, twitterApiVersion) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (twitterApiVersion === TwitterApiVersions.V2 || !twitterId) {
+            if (!twitterApiVersion && !twitterId) {
                 return new TwitterApiHandler(undefined, TwitterApiVersions.V2);
+            }
+            if (!twitterId) {
+                return new TwitterApiHandler(undefined, twitterApiVersion);
             }
             const user = yield database_1.ArenaUser.findOne({
                 where: {

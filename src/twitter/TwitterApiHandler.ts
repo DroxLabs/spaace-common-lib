@@ -48,8 +48,12 @@ export class TwitterApiHandler {
     twitterId?: string,
     twitterApiVersion?: TwitterApiVersions,
   ) {
-    if (twitterApiVersion === TwitterApiVersions.V2 || !twitterId) {
+    if (!twitterApiVersion && !twitterId) {
       return new TwitterApiHandler(undefined, TwitterApiVersions.V2);
+    }
+
+    if (!twitterId) {
+      return new TwitterApiHandler(undefined, twitterApiVersion);
     }
 
     const user = await ArenaUser.findOne({
