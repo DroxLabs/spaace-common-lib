@@ -62,6 +62,16 @@ __decorate([
     (0, typeorm_1.JoinColumn)({ name: 'adminId', referencedColumnName: 'twitterId' }),
     __metadata("design:type", String)
 ], ArenaSpaaceTweet.prototype, "adminId", void 0);
+__decorate([
+    (0, graphql_1.Field)(() => String, { nullable: true }),
+    (0, typeorm_1.Column)('text', { nullable: true }),
+    __metadata("design:type", Object)
+], ArenaSpaaceTweet.prototype, "likeNextPageToken", void 0);
+__decorate([
+    (0, graphql_1.Field)(() => String, { nullable: true }),
+    (0, typeorm_1.Column)('text', { nullable: true }),
+    __metadata("design:type", Object)
+], ArenaSpaaceTweet.prototype, "retweetNextPageToken", void 0);
 ArenaSpaaceTweet = __decorate([
     (0, graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)({ name: 'arena_spaace_tweet' })

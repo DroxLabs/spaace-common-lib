@@ -50,4 +50,12 @@ export class ArenaSpaaceTweet extends BaseEntity {
   @ManyToOne(() => ArenaAdmin, { nullable: true })
   @JoinColumn({ name: 'adminId', referencedColumnName: 'twitterId' })
   adminId!: string;
+
+  @Field(() => String, { nullable: true })
+  @Column('text', { nullable: true })
+  likeNextPageToken!: string | null;
+
+  @Field(() => String, { nullable: true })
+  @Column('text', { nullable: true })
+  retweetNextPageToken!: string | null;
 }
