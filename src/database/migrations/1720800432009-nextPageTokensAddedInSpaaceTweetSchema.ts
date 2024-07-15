@@ -6,7 +6,6 @@ export class NextPageTokensAddedInSpaaceTweetSchema1720800432009
   name = 'NextPageTokensAddedInSpaaceTweetSchema1720800432009';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`ALTER TABLE "arena_users" ADD "uuid" text`);
     await queryRunner.query(
       `ALTER TABLE "arena_spaace_tweet" ADD "likeNextPageToken" text`,
     );
@@ -28,6 +27,5 @@ export class NextPageTokensAddedInSpaaceTweetSchema1720800432009
     await queryRunner.query(
       `ALTER TABLE "arena_spaace_tweet" DROP COLUMN "likeNextPageToken"`,
     );
-    await queryRunner.query(`ALTER TABLE "arena_users" DROP COLUMN "uuid"`);
   }
 }

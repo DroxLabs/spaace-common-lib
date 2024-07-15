@@ -16,7 +16,6 @@ class NextPageTokensAddedInSpaaceTweetSchema1720800432009 {
     }
     up(queryRunner) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield queryRunner.query(`ALTER TABLE "arena_users" ADD "uuid" text`);
             yield queryRunner.query(`ALTER TABLE "arena_spaace_tweet" ADD "likeNextPageToken" text`);
             yield queryRunner.query(`ALTER TABLE "arena_spaace_tweet" ADD "retweetNextPageToken" text`);
             yield queryRunner.query(`ALTER TABLE "arena_wow_chest_probability" ALTER COLUMN "probability" SET DEFAULT '0.00'`);
@@ -27,7 +26,6 @@ class NextPageTokensAddedInSpaaceTweetSchema1720800432009 {
             yield queryRunner.query(`ALTER TABLE "arena_wow_chest_probability" ALTER COLUMN "probability" SET DEFAULT 0.00`);
             yield queryRunner.query(`ALTER TABLE "arena_spaace_tweet" DROP COLUMN "retweetNextPageToken"`);
             yield queryRunner.query(`ALTER TABLE "arena_spaace_tweet" DROP COLUMN "likeNextPageToken"`);
-            yield queryRunner.query(`ALTER TABLE "arena_users" DROP COLUMN "uuid"`);
         });
     }
 }
