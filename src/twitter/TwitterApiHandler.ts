@@ -9,24 +9,18 @@ import { TwitterUserv2 } from './types';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { default: addOAuthInterceptor } = require('axios-oauth-1.0a');
 
-export enum TwitterApiVersions {
-  V1 = '1.1',
-  V2 = '2',
-}
-
 export class TwitterApiHandler {
   private twitterApiInstance: AxiosInstance;
   private readonly twitterApiBaseUrl = 'https://api.twitter.com';
 
   constructor(
     userCreds?: Pick<ArenaUser, 'twitterAccessToken' | 'twitterSecretToken'>,
-    twitterApiVersion: TwitterApiVersions = TwitterApiVersions.V1,
   ) {
     const axiosInstance = axios.create({
       baseURL: this.twitterApiBaseUrl,
     });
 
-    if (twitterApiVersion === TwitterApiVersions.V1 && userCreds) {
+    if (userCreds) {
       const options = {
         key: process.env.TWITTER_CONSUMER_KEY,
         secret: process.env.TWITTER_CONSUMER_SECRET,
@@ -44,16 +38,9 @@ export class TwitterApiHandler {
     this.twitterApiInstance = axiosInstance;
   }
 
-  static async build(
-    twitterId?: string,
-    twitterApiVersion?: TwitterApiVersions,
-  ) {
-    if (!twitterApiVersion && !twitterId) {
-      return new TwitterApiHandler(undefined, TwitterApiVersions.V2);
-    }
-
+  static async build(twitterId?: string) {
     if (!twitterId) {
-      return new TwitterApiHandler(undefined, twitterApiVersion);
+      return new TwitterApiHandler(undefined);
     }
 
     const user = await ArenaUser.findOne({
@@ -64,31 +51,20 @@ export class TwitterApiHandler {
 
     if (!user) throw new Error('User not found');
 
-    return new TwitterApiHandler(
-      {
-        twitterAccessToken: user.twitterAccessToken,
-        twitterSecretToken: user.twitterSecretToken,
-      },
-      twitterApiVersion,
-    );
+    return new TwitterApiHandler({
+      twitterAccessToken: user.twitterAccessToken,
+      twitterSecretToken: user.twitterSecretToken,
+    });
   }
 
   static async buildWithCreds(
     twitterAccessToken: string,
     twitterSecretToken: string,
-    twitterApiVersion?: TwitterApiVersions,
   ) {
-    if (twitterApiVersion === TwitterApiVersions.V2) {
-      return new TwitterApiHandler(undefined, TwitterApiVersions.V2);
-    }
-
-    return new TwitterApiHandler(
-      {
-        twitterAccessToken,
-        twitterSecretToken,
-      },
-      twitterApiVersion,
-    );
+    return new TwitterApiHandler({
+      twitterAccessToken,
+      twitterSecretToken,
+    });
   }
 
   async getUserById(id: string) {

@@ -2,16 +2,12 @@ import { MultipleTweetsLookupResponse } from './types/responses/MultipleTweetsLo
 import { TweetsStatsResponse, UserStatsResponse } from './types/responses/TweetsStatsResponse';
 import { ArenaUser } from '../database';
 import { TwitterUserv2 } from './types';
-export declare enum TwitterApiVersions {
-    V1 = "1.1",
-    V2 = "2"
-}
 export declare class TwitterApiHandler {
     private twitterApiInstance;
     private readonly twitterApiBaseUrl;
-    constructor(userCreds?: Pick<ArenaUser, 'twitterAccessToken' | 'twitterSecretToken'>, twitterApiVersion?: TwitterApiVersions);
-    static build(twitterId?: string, twitterApiVersion?: TwitterApiVersions): Promise<TwitterApiHandler>;
-    static buildWithCreds(twitterAccessToken: string, twitterSecretToken: string, twitterApiVersion?: TwitterApiVersions): Promise<TwitterApiHandler>;
+    constructor(userCreds?: Pick<ArenaUser, 'twitterAccessToken' | 'twitterSecretToken'>);
+    static build(twitterId?: string): Promise<TwitterApiHandler>;
+    static buildWithCreds(twitterAccessToken: string, twitterSecretToken: string): Promise<TwitterApiHandler>;
     getUserById(id: string): Promise<TwitterUserv2>;
     getUserByUsername(username: string): Promise<TwitterUserv2>;
     getMultipleTweets(tweetIds: string[]): Promise<MultipleTweetsLookupResponse[]>;

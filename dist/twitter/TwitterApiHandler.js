@@ -9,23 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TwitterApiHandler = exports.TwitterApiVersions = void 0;
+exports.TwitterApiHandler = void 0;
 const axios_1 = require("axios");
 const database_1 = require("../database");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { default: addOAuthInterceptor } = require('axios-oauth-1.0a');
-var TwitterApiVersions;
-(function (TwitterApiVersions) {
-    TwitterApiVersions["V1"] = "1.1";
-    TwitterApiVersions["V2"] = "2";
-})(TwitterApiVersions = exports.TwitterApiVersions || (exports.TwitterApiVersions = {}));
 class TwitterApiHandler {
-    constructor(userCreds, twitterApiVersion = TwitterApiVersions.V1) {
+    constructor(userCreds) {
         this.twitterApiBaseUrl = 'https://api.twitter.com';
         const axiosInstance = axios_1.default.create({
             baseURL: this.twitterApiBaseUrl,
         });
-        if (twitterApiVersion === TwitterApiVersions.V1 && userCreds) {
+        if (userCreds) {
             const options = {
                 key: process.env.TWITTER_CONSUMER_KEY,
                 secret: process.env.TWITTER_CONSUMER_SECRET,
@@ -39,13 +34,10 @@ class TwitterApiHandler {
         }
         this.twitterApiInstance = axiosInstance;
     }
-    static build(twitterId, twitterApiVersion) {
+    static build(twitterId) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!twitterApiVersion && !twitterId) {
-                return new TwitterApiHandler(undefined, TwitterApiVersions.V2);
-            }
             if (!twitterId) {
-                return new TwitterApiHandler(undefined, twitterApiVersion);
+                return new TwitterApiHandler(undefined);
             }
             const user = yield database_1.ArenaUser.findOne({
                 where: {
@@ -57,18 +49,15 @@ class TwitterApiHandler {
             return new TwitterApiHandler({
                 twitterAccessToken: user.twitterAccessToken,
                 twitterSecretToken: user.twitterSecretToken,
-            }, twitterApiVersion);
+            });
         });
     }
-    static buildWithCreds(twitterAccessToken, twitterSecretToken, twitterApiVersion) {
+    static buildWithCreds(twitterAccessToken, twitterSecretToken) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (twitterApiVersion === TwitterApiVersions.V2) {
-                return new TwitterApiHandler(undefined, TwitterApiVersions.V2);
-            }
             return new TwitterApiHandler({
                 twitterAccessToken,
                 twitterSecretToken,
-            }, twitterApiVersion);
+            });
         });
     }
     getUserById(id) {
