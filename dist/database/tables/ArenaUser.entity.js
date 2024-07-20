@@ -147,6 +147,11 @@ __decorate([
     (0, typeorm_1.Column)('boolean', { default: false }),
     __metadata("design:type", Boolean)
 ], ArenaUser.prototype, "isOnboardingChestClaimed", void 0);
+__decorate([
+    (0, graphql_1.Field)(() => Boolean, { nullable: true }),
+    (0, typeorm_1.Column)('boolean', { nullable: true, default: false }),
+    __metadata("design:type", Boolean)
+], ArenaUser.prototype, "emailVerified", void 0);
 ArenaUser = ArenaUser_1 = __decorate([
     (0, graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)({ name: 'arena_users' })

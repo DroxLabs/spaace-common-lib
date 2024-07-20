@@ -120,4 +120,8 @@ export class ArenaUser extends BaseEntity {
   @Field(() => Boolean)
   @Column('boolean', { default: false })
   isOnboardingChestClaimed!: boolean;
+
+  @Field(() => Boolean, { nullable: true })
+  @Column('boolean', { nullable: true, default: false })
+  emailVerified!: boolean;
 }
