@@ -7,15 +7,12 @@ import {
   ManyToOne,
   JoinColumn,
   Index,
-  Unique,
 } from 'typeorm';
 import { ArenaUser, ArenaSeason, ArenaDivisionName } from '.';
 
 @ObjectType()
 @Entity({ name: 'arena_users_progress' })
 @Index(['division', 'league', 'leagueRank'])
-@Unique(['seasonNumber', 'rank'])
-@Unique(['seasonNumber', 'division', 'league', 'leagueRank'])
 export class ArenaUserProgress extends BaseEntity {
   @Field(() => String)
   @PrimaryColumn('text')

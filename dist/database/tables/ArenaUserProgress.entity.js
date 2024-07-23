@@ -88,9 +88,7 @@ __decorate([
 ArenaUserProgress = __decorate([
     (0, graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)({ name: 'arena_users_progress' }),
-    (0, typeorm_1.Index)(['division', 'league', 'leagueRank']),
-    (0, typeorm_1.Unique)(['seasonNumber', 'rank']),
-    (0, typeorm_1.Unique)(['seasonNumber', 'division', 'league', 'leagueRank'])
+    (0, typeorm_1.Index)(['division', 'league', 'leagueRank'])
 ], ArenaUserProgress);
 exports.ArenaUserProgress = ArenaUserProgress;
 //# sourceMappingURL=ArenaUserProgress.entity.js.map
