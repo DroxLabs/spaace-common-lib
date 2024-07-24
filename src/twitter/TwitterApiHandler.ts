@@ -180,6 +180,8 @@ export class TwitterApiHandler {
           )}) -is:retweet&tweet.fields=author_id,id,text,public_metrics,conversation_id`,
     );
 
+    console.log('get mentions in common lib ==>>', data.data);
+
     const filteredTweets = data?.data?.filter(
       (tweet) => tweet.conversation_id === tweet.id,
     );
