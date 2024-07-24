@@ -115,7 +115,7 @@ class TwitterApiHandler {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const { data, } = yield this.twitterApiInstance.get(startTime && endTime
-                ? `2/tweets/search/recent?start_time=${encodeURIComponent(startTime)}&end_time=${encodeURIComponent(endTime)}&query=(${encodeURIComponent(query)}) -is:retweet&tweet.fields=author_id,id,text,public_metrics,conversation_id`
+                ? `2/tweets/search/recent?start_time=${encodeURIComponent(startTime)}&end_time=${encodeURIComponent(endTime)}&max_results=100&query=(${encodeURIComponent(query)}) -is:retweet&tweet.fields=author_id,id,text,public_metrics,conversation_id`
                 : `2/tweets/search/recent?query=(${encodeURIComponent(query)}) -is:retweet&tweet.fields=author_id,id,text,public_metrics,conversation_id`);
             console.log('get mentions in common lib ==>>', data.data);
             const filteredTweets = (_a = data === null || data === void 0 ? void 0 : data.data) === null || _a === void 0 ? void 0 : _a.filter((tweet) => tweet.conversation_id === tweet.id);

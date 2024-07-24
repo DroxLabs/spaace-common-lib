@@ -172,7 +172,7 @@ export class TwitterApiHandler {
             startTime,
           )}&end_time=${encodeURIComponent(
             endTime,
-          )}&query=(${encodeURIComponent(
+          )}&max_results=100&query=(${encodeURIComponent(
             query,
           )}) -is:retweet&tweet.fields=author_id,id,text,public_metrics,conversation_id`
         : `2/tweets/search/recent?query=(${encodeURIComponent(
