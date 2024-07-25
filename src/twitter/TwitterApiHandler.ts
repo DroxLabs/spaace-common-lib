@@ -161,11 +161,21 @@ export class TwitterApiHandler {
     return data;
   }
 
-  async getMentions(query: string, startTime?: string, endTime?: string) {
+  async getMentions(
+    query: string,
+    startTime?: string,
+    endTime?: string,
+  ): Promise<{
+    data: MultipleTweetsLookupResponse[];
+    meta: { next_token: string };
+  }> {
     const {
       data,
     }: {
-      data: { data: MultipleTweetsLookupResponse[] };
+      data: {
+        data: MultipleTweetsLookupResponse[];
+        meta: { next_token: string };
+      };
     } = await this.twitterApiInstance.get(
       startTime && endTime
         ? `2/tweets/search/recent?start_time=${encodeURIComponent(
@@ -184,6 +194,9 @@ export class TwitterApiHandler {
       (tweet) => tweet.conversation_id === tweet.id,
     );
 
-    return filteredTweets;
+    return {
+      data: filteredTweets,
+      meta: data.meta,
+    };
   }
 }

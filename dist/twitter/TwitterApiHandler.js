@@ -118,7 +118,10 @@ class TwitterApiHandler {
                 ? `2/tweets/search/recent?start_time=${encodeURIComponent(startTime)}&end_time=${encodeURIComponent(endTime)}&max_results=100&query=(${encodeURIComponent(query)}) -is:retweet&tweet.fields=author_id,id,text,public_metrics,conversation_id`
                 : `2/tweets/search/recent?query=(${encodeURIComponent(query)}) -is:retweet&tweet.fields=author_id,id,text,public_metrics,conversation_id`);
             const filteredTweets = (_a = data === null || data === void 0 ? void 0 : data.data) === null || _a === void 0 ? void 0 : _a.filter((tweet) => tweet.conversation_id === tweet.id);
-            return filteredTweets;
+            return {
+                data: filteredTweets,
+                meta: data.meta,
+            };
         });
     }
 }
