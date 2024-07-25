@@ -165,6 +165,7 @@ export class TwitterApiHandler {
     query: string,
     startTime?: string,
     endTime?: string,
+    pagination_token?: string,
   ): Promise<{
     data: MultipleTweetsLookupResponse[];
     meta: { next_token: string };
@@ -177,7 +178,7 @@ export class TwitterApiHandler {
         meta: { next_token: string };
       };
     } = await this.twitterApiInstance.get(
-      startTime && endTime
+      (startTime && endTime
         ? `2/tweets/search/recent?start_time=${encodeURIComponent(
             startTime,
           )}&end_time=${encodeURIComponent(
@@ -187,7 +188,8 @@ export class TwitterApiHandler {
           )}) -is:retweet&tweet.fields=author_id,id,text,public_metrics,conversation_id`
         : `2/tweets/search/recent?query=(${encodeURIComponent(
             query,
-          )}) -is:retweet&tweet.fields=author_id,id,text,public_metrics,conversation_id`,
+          )}) -is:retweet&tweet.fields=author_id,id,text,public_metrics,conversation_id`) +
+        `${pagination_token ? `&next_token=${pagination_token}` : ''}`,
     );
 
     const filteredTweets = data?.data?.filter(
