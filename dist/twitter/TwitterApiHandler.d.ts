@@ -8,6 +8,7 @@ export declare class TwitterApiHandler {
     constructor(userCreds?: Pick<ArenaUser, 'twitterAccessToken' | 'twitterSecretToken'>);
     static build(twitterId?: string): Promise<TwitterApiHandler>;
     static buildWithCreds(twitterAccessToken: string, twitterSecretToken: string): Promise<TwitterApiHandler>;
+    areCredsValid(username: string): Promise<boolean>;
     getUserById(id: string): Promise<TwitterUserv2>;
     getUserByUsername(username: string): Promise<TwitterUserv2>;
     getMultipleTweets(tweetIds: string[]): Promise<MultipleTweetsLookupResponse[]>;

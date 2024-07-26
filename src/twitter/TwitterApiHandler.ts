@@ -67,6 +67,16 @@ export class TwitterApiHandler {
     });
   }
 
+  async areCredsValid(username: string) {
+    try {
+      await this.twitterApiInstance.get(`2/users/by/username/${username}`);
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   async getUserById(id: string) {
     const { data }: { data: { data: TwitterUserv2 } } =
       await this.twitterApiInstance.get(

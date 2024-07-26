@@ -60,6 +60,17 @@ class TwitterApiHandler {
             });
         });
     }
+    areCredsValid(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield this.twitterApiInstance.get(`2/users/by/username/${username}`);
+                return true;
+            }
+            catch (e) {
+                return false;
+            }
+        });
+    }
     getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const { data } = yield this.twitterApiInstance.get(`2/users/${id}?user.fields=public_metrics,description,verified,created_at`);
