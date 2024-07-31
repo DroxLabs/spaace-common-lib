@@ -92,6 +92,15 @@ class TwitterApiHandler {
             return data.data;
         });
     }
+    getMultipleTweetsTest(tweetIds) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (tweetIds.length > 100)
+                throw new Error('Only 100 tweets response is allowed per request.');
+            const tweetIdsString = tweetIds.join(',');
+            const response = yield this.twitterApiInstance.get(`2/tweets?ids=${tweetIdsString}&tweet.fields=public_metrics&expansions=author_id&user.fields=username`);
+            return response;
+        });
+    }
     getLikingUsers(tweetId, pagination_token) {
         return __awaiter(this, void 0, void 0, function* () {
             const { data } = yield this.twitterApiInstance.get(`2/tweets/${tweetId}/liking_users?max_results=100${pagination_token ? `&pagination_token=${pagination_token}` : ''}`);

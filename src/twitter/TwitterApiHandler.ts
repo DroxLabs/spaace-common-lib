@@ -109,6 +109,20 @@ export class TwitterApiHandler {
     return data.data;
   }
 
+  async getMultipleTweetsTest(tweetIds: string[]) {
+    if (tweetIds.length > 100)
+      throw new Error('Only 100 tweets response is allowed per request.');
+
+    const tweetIdsString = tweetIds.join(',');
+
+    const response: { data: { data: MultipleTweetsLookupResponse[] } } =
+      await this.twitterApiInstance.get(
+        `2/tweets?ids=${tweetIdsString}&tweet.fields=public_metrics&expansions=author_id&user.fields=username`,
+      );
+
+    return response;
+  }
+
   async getLikingUsers(tweetId: string, pagination_token?: string) {
     const { data }: { data: UserStatsResponse } =
       await this.twitterApiInstance.get(

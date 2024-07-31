@@ -12,6 +12,11 @@ export declare class TwitterApiHandler {
     getUserById(id: string): Promise<TwitterUserv2>;
     getUserByUsername(username: string): Promise<TwitterUserv2>;
     getMultipleTweets(tweetIds: string[]): Promise<MultipleTweetsLookupResponse[]>;
+    getMultipleTweetsTest(tweetIds: string[]): Promise<{
+        data: {
+            data: MultipleTweetsLookupResponse[];
+        };
+    }>;
     getLikingUsers(tweetId: string, pagination_token?: string): Promise<UserStatsResponse>;
     getRetweetedByUsers(tweetId: string, pagination_token?: string): Promise<UserStatsResponse>;
     getReplies(tweetId: string, startTime?: string, endTime?: string, pagination_token?: string): Promise<TweetsStatsResponse>;
