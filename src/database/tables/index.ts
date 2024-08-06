@@ -71,3 +71,4 @@ export * from './ArenaUserBooster.entity';
 export * from './ArenaCrewChestPoints.entity';
 
 export * from './ArenaAdmin.entity';
+export * from './ArenaTweetWeek.entity';
