@@ -115,13 +115,13 @@ class TwitterApiHandler {
     }
     getReplies(tweetId, startTime, endTime, pagination_token) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { data } = yield this.twitterApiInstance.get(`2/tweets/search/recent?max_results=100&tweet.fields=author_id,id&query=in_reply_to_tweet_id: ${tweetId}${startTime ? `&start_time=${startTime}` : ''}${endTime ? `&end_time=${endTime}` : ''}${pagination_token ? `&next_token=${pagination_token}` : ''}`);
+            const { data } = yield this.twitterApiInstance.get(`2/tweets/search/recent?max_results=100&tweet.fields=author_id,id,created_at&query=in_reply_to_tweet_id: ${tweetId}${startTime ? `&start_time=${startTime}` : ''}${endTime ? `&end_time=${endTime}` : ''}${pagination_token ? `&next_token=${pagination_token}` : ''}`);
             return data;
         });
     }
     getQuoteTweets(tweetId, pagination_token) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { data } = yield this.twitterApiInstance.get(`2/tweets/${tweetId}/quote_tweets?max_results=100&tweet.fields=author_id&user.fields=id${pagination_token ? `&pagination_token=${pagination_token}` : ''}`);
+            const { data } = yield this.twitterApiInstance.get(`2/tweets/${tweetId}/quote_tweets?max_results=100&tweet.fields=author_id,created_at&user.fields=id${pagination_token ? `&pagination_token=${pagination_token}` : ''}`);
             return data;
         });
     }
@@ -135,7 +135,7 @@ class TwitterApiHandler {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const { data, } = yield this.twitterApiInstance.get((startTime && endTime
-                ? `2/tweets/search/recent?start_time=${encodeURIComponent(startTime)}&end_time=${encodeURIComponent(endTime)}&max_results=100&query=(${encodeURIComponent(query)}) -is:retweet&tweet.fields=author_id,id,text,public_metrics,conversation_id`
+                ? `2/tweets/search/recent?start_time=${encodeURIComponent(startTime)}&end_time=${encodeURIComponent(endTime)}&max_results=100&query=(${encodeURIComponent(query)}) -is:retweet&tweet.fields=author_id,id,text,public_metrics,conversation_id,created_at`
                 : `2/tweets/search/recent?query=(${encodeURIComponent(query)}) -is:retweet&tweet.fields=author_id,id,text,public_metrics,conversation_id`) +
                 `${pagination_token ? `&next_token=${pagination_token}` : ''}`);
             const filteredTweets = (_a = data === null || data === void 0 ? void 0 : data.data) === null || _a === void 0 ? void 0 : _a.filter((tweet) => tweet.conversation_id === tweet.id);

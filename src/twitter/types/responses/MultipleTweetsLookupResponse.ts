@@ -4,6 +4,7 @@ export interface MultipleTweetsLookupResponse {
   text: string;
   id: string; // ? tweet id
   conversation_id?: string;
+  created_at?: string;
 }
 
 export interface TweetMetrics {

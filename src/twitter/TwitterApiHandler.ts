@@ -153,7 +153,7 @@ export class TwitterApiHandler {
   ) {
     const { data }: { data: TweetsStatsResponse } =
       await this.twitterApiInstance.get(
-        `2/tweets/search/recent?max_results=100&tweet.fields=author_id,id&query=in_reply_to_tweet_id: ${tweetId}${
+        `2/tweets/search/recent?max_results=100&tweet.fields=author_id,id,created_at&query=in_reply_to_tweet_id: ${tweetId}${
           startTime ? `&start_time=${startTime}` : ''
         }${endTime ? `&end_time=${endTime}` : ''}${
           pagination_token ? `&next_token=${pagination_token}` : ''
@@ -166,7 +166,7 @@ export class TwitterApiHandler {
   async getQuoteTweets(tweetId: string, pagination_token?: string) {
     const { data }: { data: TweetsStatsResponse } =
       await this.twitterApiInstance.get(
-        `2/tweets/${tweetId}/quote_tweets?max_results=100&tweet.fields=author_id&user.fields=id${
+        `2/tweets/${tweetId}/quote_tweets?max_results=100&tweet.fields=author_id,created_at&user.fields=id${
           pagination_token ? `&pagination_token=${pagination_token}` : ''
         }`,
       );
@@ -209,7 +209,7 @@ export class TwitterApiHandler {
             endTime,
           )}&max_results=100&query=(${encodeURIComponent(
             query,
-          )}) -is:retweet&tweet.fields=author_id,id,text,public_metrics,conversation_id`
+          )}) -is:retweet&tweet.fields=author_id,id,text,public_metrics,conversation_id,created_at`
         : `2/tweets/search/recent?query=(${encodeURIComponent(
             query,
           )}) -is:retweet&tweet.fields=author_id,id,text,public_metrics,conversation_id`) +

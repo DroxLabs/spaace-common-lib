@@ -4,6 +4,7 @@ export interface MultipleTweetsLookupResponse {
     text: string;
     id: string;
     conversation_id?: string;
+    created_at?: string;
 }
 export interface TweetMetrics {
     retweet_count: number;

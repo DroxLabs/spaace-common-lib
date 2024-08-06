@@ -5,6 +5,7 @@ export interface TweetResponse {
     text: string;
     author_id: string;
     public_metrics?: TweetMetrics;
+    created_at?: string;
 }
 export interface TweetsStatsResponse {
     data?: TweetResponse[];
