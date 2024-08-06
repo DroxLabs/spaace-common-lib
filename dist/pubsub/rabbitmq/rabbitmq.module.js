@@ -38,6 +38,12 @@ RabbitMQCustomModule = __decorate([
                 ],
                 uri: `amqp://guest:guest@${host}:${port}/`,
                 enableControllerDiscovery: true,
+                connectionInitOptions: {
+                    timeout: 60000,
+                },
+                connectionManagerOptions: {
+                    heartbeatIntervalInSeconds: 60,
+                },
             }),
         ],
         providers: [rabbitmq_client_1.RabbitMQClient],

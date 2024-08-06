@@ -27,6 +27,12 @@ const port = parseInt(process.env.RABBITMQ_PORT ?? '5672', 10);
       ],
       uri: `amqp://guest:guest@${host}:${port}/`,
       enableControllerDiscovery: true,
+      connectionInitOptions: {
+        timeout: 60000,
+      },
+      connectionManagerOptions: {
+        heartbeatIntervalInSeconds: 60,
+      },
     }),
   ],
   providers: [RabbitMQClient],
