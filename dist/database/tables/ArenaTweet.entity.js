@@ -77,6 +77,11 @@ __decorate([
     (0, typeorm_1.Column)('timestamp without time zone', { default: () => 'CURRENT_TIMESTAMP' }),
     __metadata("design:type", Date)
 ], ArenaTweet.prototype, "repliesLastFetched", void 0);
+__decorate([
+    (0, graphql_1.Field)(() => Date),
+    (0, typeorm_1.Column)('timestamp without time zone', { default: () => 'CURRENT_TIMESTAMP' }),
+    __metadata("design:type", Date)
+], ArenaTweet.prototype, "timestamp", void 0);
 ArenaTweet = __decorate([
     (0, graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)({ name: 'arena_tweet' })

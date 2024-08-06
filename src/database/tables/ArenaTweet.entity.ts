@@ -63,4 +63,8 @@ export class ArenaTweet extends BaseEntity {
   @Field(() => Date)
   @Column('timestamp without time zone', { default: () => 'CURRENT_TIMESTAMP' })
   repliesLastFetched!: Date;
+
+  @Field(() => Date)
+  @Column('timestamp without time zone', { default: () => 'CURRENT_TIMESTAMP' })
+  timestamp!: Date;
 }

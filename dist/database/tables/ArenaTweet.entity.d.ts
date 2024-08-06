@@ -11,4 +11,5 @@ export declare class ArenaTweet extends BaseEntity {
     quoteTweetId: string | null;
     replyTweetId: string | null;
     repliesLastFetched: Date;
+    timestamp: Date;
 }
