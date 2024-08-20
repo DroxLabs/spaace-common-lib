@@ -7,7 +7,8 @@ export declare enum ArenaQuestTrigger {
     SOCIAL = "SOCIAL",
     SOCIAL_PRIME = "SOCIAL_PRIME",
     USER_LEVEL_PROGRESS = "USER_LEVEL_PROGRESS",
-    CREW_PROGRESS = "CREW_PROGRESS"
+    CREW_PROGRESS = "CREW_PROGRESS",
+    SOCIAL_CREW = "SOCIAL_CREW"
 }
 export declare enum ArenaQuestRuleOperator {
     EQ = "EQ",
