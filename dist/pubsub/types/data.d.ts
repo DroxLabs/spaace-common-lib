@@ -8,4 +8,4 @@ export type ArenaPubSubData<T extends ArenaQuestTrigger> = T extends ArenaQuestT
     action?: string;
 } : T extends ArenaQuestTrigger.REFERRAL ? ArenaUser : T extends ArenaQuestTrigger.USER_LEVEL_PROGRESS ? ArenaUser : T extends ArenaQuestTrigger.CREW_PROGRESS ? ArenaUser : T extends ArenaQuestTrigger.SOCIAL ? ArenaTweet & {
     action?: string;
-} : T extends ArenaQuestTrigger.SOCIAL_PRIME ? ArenaTweet : never;
+} : T extends ArenaQuestTrigger.SOCIAL_PRIME ? ArenaTweet : T extends ArenaQuestTrigger.SOCIAL_CREW ? ArenaUser : never;
