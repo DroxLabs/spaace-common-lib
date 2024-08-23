@@ -80,4 +80,5 @@ __exportStar(require("./ArenaUserBooster.entity"), exports);
 __exportStar(require("./ArenaCrewChestPoints.entity"), exports);
 __exportStar(require("./ArenaAdmin.entity"), exports);
 __exportStar(require("./ArenaTweetWeek.entity"), exports);
+__exportStar(require("./ArenaCodes.entity"), exports);
 //# sourceMappingURL=index.js.map
