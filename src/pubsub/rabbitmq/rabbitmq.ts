@@ -2,6 +2,7 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { RabbitMQClient } from './rabbitmq.client';
 import '../../config';
 
+const protocol = process.env.RABBITMQ_PROTOCOL ?? 'amqp';
 const host = process.env.RABBITMQ_HOST ?? 'rabbitmq';
 const port = parseInt(process.env.RABBITMQ_PORT ?? '5672', 10);
 const username = process.env.RABBITMQ_USERNAME ?? 'guest';
@@ -28,7 +29,7 @@ export class RabbitMQ {
           },
         },
       ],
-      uri: `amqp://${username}:${password}@${host}:${port}/`,
+      uri: `${protocol}://${username}:${password}@${host}:${port}/`,
       enableControllerDiscovery: true,
       prefetchCount,
     });
