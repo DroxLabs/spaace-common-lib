@@ -5,7 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var _a, _b;
+var _a, _b, _c, _d;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RabbitMQCustomModule = void 0;
 const common_1 = require("@nestjs/common");
@@ -14,6 +14,8 @@ const nestjs_rabbitmq_1 = require("@golevelup/nestjs-rabbitmq");
 require("../../config");
 const host = (_a = process.env.RABBITMQ_HOST) !== null && _a !== void 0 ? _a : 'rabbitmq';
 const port = parseInt((_b = process.env.RABBITMQ_PORT) !== null && _b !== void 0 ? _b : '5672', 10);
+const username = (_c = process.env.RABBITMQ_USERNAME) !== null && _c !== void 0 ? _c : 'guest';
+const password = (_d = process.env.RABBITMQ_PASSWORD) !== null && _d !== void 0 ? _d : 'guest';
 let RabbitMQCustomModule = class RabbitMQCustomModule {
 };
 RabbitMQCustomModule = __decorate([
@@ -36,7 +38,7 @@ RabbitMQCustomModule = __decorate([
                         },
                     },
                 ],
-                uri: `amqp://guest:guest@${host}:${port}/`,
+                uri: `amqp://${username}:${password}@${host}:${port}/`,
                 enableControllerDiscovery: true,
                 connectionInitOptions: {
                     timeout: 60000,

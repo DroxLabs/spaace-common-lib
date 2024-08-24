@@ -5,6 +5,8 @@ import '../../config';
 
 const host = process.env.RABBITMQ_HOST ?? 'rabbitmq';
 const port = parseInt(process.env.RABBITMQ_PORT ?? '5672', 10);
+const username = process.env.RABBITMQ_USERNAME ?? 'guest';
+const password = process.env.RABBITMQ_PASSWORD ?? 'guest';
 
 @Module({
   imports: [
@@ -25,7 +27,7 @@ const port = parseInt(process.env.RABBITMQ_PORT ?? '5672', 10);
           },
         },
       ],
-      uri: `amqp://guest:guest@${host}:${port}/`,
+      uri: `amqp://${username}:${password}@${host}:${port}/`,
       enableControllerDiscovery: true,
       connectionInitOptions: {
         timeout: 60000,

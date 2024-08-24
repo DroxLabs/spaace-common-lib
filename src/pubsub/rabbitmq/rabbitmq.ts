@@ -4,6 +4,8 @@ import '../../config';
 
 const host = process.env.RABBITMQ_HOST ?? 'rabbitmq';
 const port = parseInt(process.env.RABBITMQ_PORT ?? '5672', 10);
+const username = process.env.RABBITMQ_USERNAME ?? 'guest';
+const password = process.env.RABBITMQ_PASSWORD ?? 'guest';
 
 export class RabbitMQ {
   static getAmpqConnectionFactory(prefetchCount?: number) {
@@ -26,7 +28,7 @@ export class RabbitMQ {
           },
         },
       ],
-      uri: `amqp://guest:guest@${host}:${port}/`,
+      uri: `amqp://${username}:${password}@${host}:${port}/`,
       enableControllerDiscovery: true,
       prefetchCount,
     });
