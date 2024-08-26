@@ -117,6 +117,10 @@ export class ArenaUser extends BaseEntity {
   @Column('text', { nullable: true, unique: true })
   userWalletAddress: string | undefined;
 
+  @Field(() => String, { nullable: true })
+  @Column('text', { nullable: true, unique: true })
+  nftWalletAddress: string | undefined;
+
   @Field(() => Boolean)
   @Column('boolean', { default: false })
   isOnboardingChestClaimed!: boolean;
