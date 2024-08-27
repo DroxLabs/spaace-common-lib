@@ -18,7 +18,6 @@ export class RabbitMQ {
         { name: 'search-index-exchange', type: 'topic' },
         { name: 'data-exchange', type: 'topic' },
         { name: 'gql-message-exchange', type: 'topic' },
-
         { name: 'exchange1', type: 'topic' },
         { name: 'dlx', type: 'direct', options: { durable: true } },
       ],

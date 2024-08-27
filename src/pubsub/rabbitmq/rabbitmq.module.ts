@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { RabbitMQClient } from './rabbitmq.client';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import '../../config';
@@ -19,14 +19,7 @@ const password = process.env.RABBITMQ_PASSWORD ?? 'guest';
         { name: 'search-index-exchange', type: 'topic' },
         { name: 'data-exchange', type: 'topic' },
         { name: 'exchange1', type: 'topic' },
-        {
-          name: 'delayed-triggers-exchange',
-          type: 'x-delayed-message',
-          options: {
-            durable: true,
-            arguments: { 'x-delayed-type': 'topic' },
-          },
-        },
+        { name: 'dlx', type: 'direct', options: { durable: true } },
       ],
       uri: `${protocol}://${username}:${password}@${host}:${port}/`,
       enableControllerDiscovery: true,
@@ -41,4 +34,10 @@ const password = process.env.RABBITMQ_PASSWORD ?? 'guest';
   providers: [RabbitMQClient],
   exports: [RabbitMQClient],
 })
-export class RabbitMQCustomModule {}
+export class RabbitMQCustomModule implements OnModuleInit {
+  constructor(private readonly rabbitMQClient: RabbitMQClient) {}
+
+  async onModuleInit() {
+    await this.rabbitMQClient.setupQueues();
+  }
+}
