@@ -5,14 +5,38 @@ import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { PubSubTopic } from '../types';
 import { exchangeMap } from './types/exchangeMap';
 
-interface ExchangeOptions {
-  durable: boolean;
-  arguments?: Record<string, any>;
-}
-
 @Injectable()
 export class RabbitMQClient {
   constructor(private readonly amqpConnection: AmqpConnection) {}
+
+  async setupQueues() {
+    // Declare the delayed queue with TTL and DLX configurations
+    try {
+      await this.amqpConnection.channel.assertQueue('delayed-queue-1', {
+        durable: true,
+        arguments: {
+          'x-message-ttl': 5000, // TTL for the message delay
+          'x-dead-letter-exchange': 'dlx', // Specify the DLX
+          'x-dead-letter-routing-key': 'process', // Routing key used by the DLX
+        },
+      });
+
+      // Ensure the DLX is properly configured
+      await this.amqpConnection.channel.assertExchange('dlx', 'direct', {
+        durable: true,
+      });
+      await this.amqpConnection.channel.assertQueue('processing-queue', {
+        durable: true,
+      });
+      await this.amqpConnection.channel.bindQueue(
+        'processing-queue',
+        'dlx',
+        'process',
+      );
+    } catch (error) {
+      console.error('Failed to setup RabbitMQ queues:', error);
+    }
+  }
 
   async batchPublish<T extends PubSubTopic>(
     topic: T,
@@ -35,39 +59,17 @@ export class RabbitMQClient {
     topic: T,
     routingKey: string,
     message: any,
-    delay?: number, // Optional delay parameter
   ) {
-    const exchange = delay
-      ? exchangeMap[PubSubTopic.DELAYED_TRIGGERS]
-      : exchangeMap[topic];
-    const exchangeType = delay ? 'x-delayed-message' : 'topic';
-    const options: any = {
+    const exchange = exchangeMap[topic];
+    await this.amqpConnection.channel.assertExchange(exchange, 'topic', {
       durable: true,
-    };
-
-    // If a delay is specified, set delay arguments
-    if (delay) {
-      options.arguments = { 'x-delayed-type': 'topic', 'x-delay': delay };
-      options.headers = { 'x-delay': delay };
-    }
-
-    // Assert the exchange based on whether there's a delay or not
-    await this.amqpConnection.channel.assertExchange(
-      exchange,
-      exchangeType,
-      options,
-    );
+    });
     this.amqpConnection.channel.publish(
       exchange,
       routingKey,
       Buffer.from(JSON.stringify(message)),
-      options,
     );
-    console.log(
-      `Published message to ${exchange}:${routingKey} with ${
-        delay ? delay + 'ms delay' : 'no delay'
-      }`,
-    );
+    console.log(`Published message to ${exchange}:${routingKey} with no delay`);
   }
 
   async subscribe<T extends PubSubTopic>(
@@ -77,19 +79,9 @@ export class RabbitMQClient {
     onMessage: (msg: any) => void,
   ) {
     const exchange = exchangeMap[topic];
-    const exchangeType =
-      topic === PubSubTopic.DELAYED_TRIGGERS ? 'x-delayed-message' : 'topic';
-    const options: ExchangeOptions = { durable: true };
-
-    if (exchangeType === 'x-delayed-message') {
-      options.arguments = { 'x-delayed-type': 'topic' };
-    }
-
-    await this.amqpConnection.channel.assertExchange(
-      exchange,
-      exchangeType,
-      options,
-    );
+    await this.amqpConnection.channel.assertExchange(exchange, 'topic', {
+      durable: true,
+    });
     await this.amqpConnection.channel.assertQueue(queueName, { durable: true });
     await this.amqpConnection.channel.bindQueue(
       queueName,

@@ -20,14 +20,7 @@ export class RabbitMQ {
         { name: 'gql-message-exchange', type: 'topic' },
 
         { name: 'exchange1', type: 'topic' },
-        {
-          name: 'delayed-triggers-exchange',
-          type: 'x-delayed-message',
-          options: {
-            durable: true,
-            arguments: { 'x-delayed-type': 'topic' },
-          },
-        },
+        { name: 'dlx', type: 'direct', options: { durable: true } },
       ],
       uri: `${protocol}://${username}:${password}@${host}:${port}/`,
       enableControllerDiscovery: true,

@@ -23,11 +23,36 @@ exports.RabbitMQClient = void 0;
 // rabbitmq-client.ts
 const common_1 = require("@nestjs/common");
 const nestjs_rabbitmq_1 = require("@golevelup/nestjs-rabbitmq");
-const types_1 = require("../types");
 const exchangeMap_1 = require("./types/exchangeMap");
 let RabbitMQClient = class RabbitMQClient {
     constructor(amqpConnection) {
         this.amqpConnection = amqpConnection;
+    }
+    setupQueues() {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Declare the delayed queue with TTL and DLX configurations
+            try {
+                yield this.amqpConnection.channel.assertQueue('delayed-queue-1', {
+                    durable: true,
+                    arguments: {
+                        'x-message-ttl': 5000,
+                        'x-dead-letter-exchange': 'dlx',
+                        'x-dead-letter-routing-key': 'process', // Routing key used by the DLX
+                    },
+                });
+                // Ensure the DLX is properly configured
+                yield this.amqpConnection.channel.assertExchange('dlx', 'direct', {
+                    durable: true,
+                });
+                yield this.amqpConnection.channel.assertQueue('processing-queue', {
+                    durable: true,
+                });
+                yield this.amqpConnection.channel.bindQueue('processing-queue', 'dlx', 'process');
+            }
+            catch (error) {
+                console.error('Failed to setup RabbitMQ queues:', error);
+            }
+        });
     }
     batchPublish(topic, routingKey, messages) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -39,35 +64,22 @@ let RabbitMQClient = class RabbitMQClient {
             console.log(`Published message to ${exchange}:${routingKey}`);
         });
     }
-    publish(topic, routingKey, message, delay) {
+    publish(topic, routingKey, message) {
         return __awaiter(this, void 0, void 0, function* () {
-            const exchange = delay
-                ? exchangeMap_1.exchangeMap[types_1.PubSubTopic.DELAYED_TRIGGERS]
-                : exchangeMap_1.exchangeMap[topic];
-            const exchangeType = delay ? 'x-delayed-message' : 'topic';
-            const options = {
+            const exchange = exchangeMap_1.exchangeMap[topic];
+            yield this.amqpConnection.channel.assertExchange(exchange, 'topic', {
                 durable: true,
-            };
-            // If a delay is specified, set delay arguments
-            if (delay) {
-                options.arguments = { 'x-delayed-type': 'topic', 'x-delay': delay };
-                options.headers = { 'x-delay': delay };
-            }
-            // Assert the exchange based on whether there's a delay or not
-            yield this.amqpConnection.channel.assertExchange(exchange, exchangeType, options);
-            this.amqpConnection.channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(message)), options);
-            console.log(`Published message to ${exchange}:${routingKey} with ${delay ? delay + 'ms delay' : 'no delay'}`);
+            });
+            this.amqpConnection.channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(message)));
+            console.log(`Published message to ${exchange}:${routingKey} with no delay`);
         });
     }
     subscribe(topic, routingKey, queueName, onMessage) {
         return __awaiter(this, void 0, void 0, function* () {
             const exchange = exchangeMap_1.exchangeMap[topic];
-            const exchangeType = topic === types_1.PubSubTopic.DELAYED_TRIGGERS ? 'x-delayed-message' : 'topic';
-            const options = { durable: true };
-            if (exchangeType === 'x-delayed-message') {
-                options.arguments = { 'x-delayed-type': 'topic' };
-            }
-            yield this.amqpConnection.channel.assertExchange(exchange, exchangeType, options);
+            yield this.amqpConnection.channel.assertExchange(exchange, 'topic', {
+                durable: true,
+            });
             yield this.amqpConnection.channel.assertQueue(queueName, { durable: true });
             yield this.amqpConnection.channel.bindQueue(queueName, exchange, routingKey);
             this.amqpConnection.channel.consume(queueName, (msg) => {
