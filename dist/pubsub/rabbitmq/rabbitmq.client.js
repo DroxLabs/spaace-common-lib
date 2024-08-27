@@ -31,14 +31,21 @@ let RabbitMQClient = class RabbitMQClient {
     setupQueues() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // Setup the Dead Letter Exchange only
+                // Setup the Dead Letter Exchange
                 yield this.amqpConnection.channel.assertExchange('dlx', 'direct', {
                     durable: true,
                 });
                 console.log('DLX setup successfully');
+                // Setup the queue to handle messages after the delay (dead-lettered messages)
+                yield this.amqpConnection.channel.assertQueue('process-queue', {
+                    durable: true,
+                });
+                // Bind the process-queue to the DLX exchange with the 'process' routing key
+                yield this.amqpConnection.channel.bindQueue('process-queue', 'dlx', 'process');
+                console.log('Queue "process-queue" bound to DLX with routing key "process" successfully');
             }
             catch (error) {
-                console.error('Failed to setup DLX:', error);
+                console.error('Failed to setup DLX and process-queue:', error);
             }
         });
     }
