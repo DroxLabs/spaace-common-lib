@@ -18,21 +18,21 @@ export class RabbitMQClient {
       console.log('DLX setup successfully');
 
       // Setup the queue to handle messages after the delay (dead-lettered messages)
-      await this.amqpConnection.channel.assertQueue('process-queue', {
+      await this.amqpConnection.channel.assertQueue('delay-queue-process', {
         durable: true,
       });
 
-      // Bind the process-queue to the DLX exchange with the 'process' routing key
+      // Bind the delay-queue-process to the DLX exchange with the 'process' routing key
       await this.amqpConnection.channel.bindQueue(
-        'process-queue',
+        'delay-queue-process',
         'dlx',
         'process',
       );
       console.log(
-        'Queue "process-queue" bound to DLX with routing key "process" successfully',
+        'Queue "delay-queue-process" bound to DLX with routing key "process" successfully',
       );
     } catch (error) {
-      console.error('Failed to setup DLX and process-queue:', error);
+      console.error('Failed to setup DLX and delay-queue-process', error);
     }
   }
 
@@ -69,7 +69,7 @@ export class RabbitMQClient {
 
       // Start consuming messages
       this.amqpConnection.channel.consume(
-        queueName,
+        'delay-queue-process',
         (msg) => {
           if (msg) {
             try {
