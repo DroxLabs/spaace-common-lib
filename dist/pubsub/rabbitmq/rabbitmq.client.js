@@ -30,44 +30,38 @@ let RabbitMQClient = class RabbitMQClient {
     }
     setupQueues() {
         return __awaiter(this, void 0, void 0, function* () {
-            // Declare the delayed queue with TTL and DLX configurations
             try {
-                yield this.amqpConnection.channel.assertQueue('delayed-queue-1', {
-                    durable: true,
-                    arguments: {
-                        'x-message-ttl': 5000,
-                        'x-dead-letter-exchange': 'dlx',
-                        'x-dead-letter-routing-key': 'process', // Routing key used by the DLX
-                    },
-                });
-                // Ensure the DLX is properly configured
+                // Setup the Dead Letter Exchange only
                 yield this.amqpConnection.channel.assertExchange('dlx', 'direct', {
                     durable: true,
                 });
-                yield this.amqpConnection.channel.assertQueue('processing-queue', {
-                    durable: true,
-                });
-                yield this.amqpConnection.channel.bindQueue('processing-queue', 'dlx', 'process');
+                console.log('DLX setup successfully');
             }
             catch (error) {
-                console.error('Failed to setup RabbitMQ queues:', error);
+                console.error('Failed to setup DLX:', error);
             }
         });
     }
-    // Add this method to the RabbitMQClient class
-    secureSubscribe(topic, routingKey, queueName, onMessage) {
+    delaySubscribe(topic, routingKey, queueName, onMessage, delayTime) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // Perform any required setup or checks before subscribing
                 const exchange = exchangeMap_1.exchangeMap[topic];
+                // Ensure the exchange is setup for the topic
                 yield this.amqpConnection.channel.assertExchange(exchange, 'topic', {
                     durable: true,
                 });
+                // Setup the specific queue with x-message-ttl and other DLX related configurations
                 yield this.amqpConnection.channel.assertQueue(queueName, {
                     durable: true,
+                    arguments: {
+                        'x-message-ttl': delayTime,
+                        'x-dead-letter-exchange': 'dlx',
+                        'x-dead-letter-routing-key': 'process',
+                    },
                 });
+                // Bind the queue to the exchange
                 yield this.amqpConnection.channel.bindQueue(queueName, exchange, routingKey);
-                // Consume messages from the queue
+                // Start consuming messages
                 this.amqpConnection.channel.consume(queueName, (msg) => {
                     if (msg) {
                         try {
@@ -77,15 +71,14 @@ let RabbitMQClient = class RabbitMQClient {
                         }
                         catch (error) {
                             console.error('Error processing message:', error);
-                            // Optionally handle message rejection or requeue
                             this.amqpConnection.channel.nack(msg, false, false);
                         }
                     }
                 }, { noAck: false });
-                console.log(`Subscribed to ${exchange}:${routingKey} with queue ${queueName}`);
+                console.log(`Subscribed to ${exchange}:${routingKey} with queue ${queueName} and delay ${delayTime} ms`);
             }
             catch (error) {
-                console.error('Failed to subscribe:', error);
+                console.error('Failed to subscribe with delay:', error);
             }
         });
     }
