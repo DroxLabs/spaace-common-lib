@@ -54,6 +54,41 @@ let RabbitMQClient = class RabbitMQClient {
             }
         });
     }
+    // Add this method to the RabbitMQClient class
+    secureSubscribe(topic, routingKey, queueName, onMessage) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // Perform any required setup or checks before subscribing
+                const exchange = exchangeMap_1.exchangeMap[topic];
+                yield this.amqpConnection.channel.assertExchange(exchange, 'topic', {
+                    durable: true,
+                });
+                yield this.amqpConnection.channel.assertQueue(queueName, {
+                    durable: true,
+                });
+                yield this.amqpConnection.channel.bindQueue(queueName, exchange, routingKey);
+                // Consume messages from the queue
+                this.amqpConnection.channel.consume(queueName, (msg) => {
+                    if (msg) {
+                        try {
+                            const message = JSON.parse(msg.content.toString());
+                            onMessage(message);
+                            this.amqpConnection.channel.ack(msg);
+                        }
+                        catch (error) {
+                            console.error('Error processing message:', error);
+                            // Optionally handle message rejection or requeue
+                            this.amqpConnection.channel.nack(msg, false, false);
+                        }
+                    }
+                }, { noAck: false });
+                console.log(`Subscribed to ${exchange}:${routingKey} with queue ${queueName}`);
+            }
+            catch (error) {
+                console.error('Failed to subscribe:', error);
+            }
+        });
+    }
     batchPublish(topic, routingKey, messages) {
         return __awaiter(this, void 0, void 0, function* () {
             const exchange = exchangeMap_1.exchangeMap[topic];
