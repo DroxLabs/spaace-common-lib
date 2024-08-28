@@ -13,6 +13,8 @@ import { ArenaUser, ArenaSeason } from '.';
 export enum ArenaUserBoosterType {
   SPECIAL = 'SPECIAL',
   WOW_CHEST = 'WOW_CHEST',
+  ADMIN = 'ADMIN',
+  NFT = 'NFT',
 }
 
 registerEnumType(ArenaUserBoosterType, {

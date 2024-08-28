@@ -17,6 +17,8 @@ var ArenaUserBoosterType;
 (function (ArenaUserBoosterType) {
     ArenaUserBoosterType["SPECIAL"] = "SPECIAL";
     ArenaUserBoosterType["WOW_CHEST"] = "WOW_CHEST";
+    ArenaUserBoosterType["ADMIN"] = "ADMIN";
+    ArenaUserBoosterType["NFT"] = "NFT";
 })(ArenaUserBoosterType = exports.ArenaUserBoosterType || (exports.ArenaUserBoosterType = {}));
 (0, graphql_1.registerEnumType)(ArenaUserBoosterType, {
     name: 'ArenaUserBoosterType',
