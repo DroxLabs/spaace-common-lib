@@ -143,11 +143,6 @@ __decorate([
     __metadata("design:type", Object)
 ], ArenaUser.prototype, "userWalletAddress", void 0);
 __decorate([
-    (0, graphql_1.Field)(() => String, { nullable: true }),
-    (0, typeorm_1.Column)('text', { nullable: true, unique: true }),
-    __metadata("design:type", Object)
-], ArenaUser.prototype, "nftWalletAddress", void 0);
-__decorate([
     (0, graphql_1.Field)(() => Boolean),
     (0, typeorm_1.Column)('boolean', { default: false }),
     __metadata("design:type", Boolean)
