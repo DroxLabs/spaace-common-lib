@@ -23,11 +23,71 @@ exports.RabbitMQClient = void 0;
 // rabbitmq-client.ts
 const common_1 = require("@nestjs/common");
 const nestjs_rabbitmq_1 = require("@golevelup/nestjs-rabbitmq");
-const types_1 = require("../types");
 const exchangeMap_1 = require("./types/exchangeMap");
 let RabbitMQClient = class RabbitMQClient {
     constructor(amqpConnection) {
         this.amqpConnection = amqpConnection;
+    }
+    setupQueues() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // Setup the Dead Letter Exchange
+                yield this.amqpConnection.channel.assertExchange('dlx', 'direct', {
+                    durable: true,
+                });
+                console.log('DLX setup successfully');
+                // Setup the queue to handle messages after the delay (dead-lettered messages)
+                yield this.amqpConnection.channel.assertQueue('delay-queue-process', {
+                    durable: true,
+                });
+                // Bind the delay-queue-process to the DLX exchange with the 'process' routing key
+                yield this.amqpConnection.channel.bindQueue('delay-queue-process', 'dlx', 'process');
+                console.log('Queue "delay-queue-process" bound to DLX with routing key "process" successfully');
+            }
+            catch (error) {
+                console.error('Failed to setup DLX and delay-queue-process', error);
+            }
+        });
+    }
+    delaySubscribe(topic, routingKey, queueName, onMessage, delayTime) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const exchange = exchangeMap_1.exchangeMap[topic];
+                // Ensure the exchange is setup for the topic
+                yield this.amqpConnection.channel.assertExchange(exchange, 'topic', {
+                    durable: true,
+                });
+                // Setup the specific queue with x-message-ttl and other DLX related configurations
+                yield this.amqpConnection.channel.assertQueue(queueName, {
+                    durable: true,
+                    arguments: {
+                        'x-message-ttl': delayTime,
+                        'x-dead-letter-exchange': 'dlx',
+                        'x-dead-letter-routing-key': 'process',
+                    },
+                });
+                // Bind the queue to the exchange
+                yield this.amqpConnection.channel.bindQueue(queueName, exchange, routingKey);
+                // Start consuming messages
+                this.amqpConnection.channel.consume('delay-queue-process', (msg) => {
+                    if (msg) {
+                        try {
+                            const message = JSON.parse(msg.content.toString());
+                            onMessage(message);
+                            this.amqpConnection.channel.ack(msg);
+                        }
+                        catch (error) {
+                            console.error('Error processing message:', error);
+                            this.amqpConnection.channel.nack(msg, false, false);
+                        }
+                    }
+                }, { noAck: false });
+                console.log(`Subscribed to ${exchange}:${routingKey} with queue ${queueName} and delay ${delayTime} ms`);
+            }
+            catch (error) {
+                console.error('Failed to subscribe with delay:', error);
+            }
+        });
     }
     batchPublish(topic, routingKey, messages) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -39,35 +99,22 @@ let RabbitMQClient = class RabbitMQClient {
             console.log(`Published message to ${exchange}:${routingKey}`);
         });
     }
-    publish(topic, routingKey, message, delay) {
+    publish(topic, routingKey, message) {
         return __awaiter(this, void 0, void 0, function* () {
-            const exchange = delay
-                ? exchangeMap_1.exchangeMap[types_1.PubSubTopic.DELAYED_TRIGGERS]
-                : exchangeMap_1.exchangeMap[topic];
-            const exchangeType = delay ? 'x-delayed-message' : 'topic';
-            const options = {
+            const exchange = exchangeMap_1.exchangeMap[topic];
+            yield this.amqpConnection.channel.assertExchange(exchange, 'topic', {
                 durable: true,
-            };
-            // If a delay is specified, set delay arguments
-            if (delay) {
-                options.arguments = { 'x-delayed-type': 'topic', 'x-delay': delay };
-                options.headers = { 'x-delay': delay };
-            }
-            // Assert the exchange based on whether there's a delay or not
-            yield this.amqpConnection.channel.assertExchange(exchange, exchangeType, options);
-            this.amqpConnection.channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(message)), options);
-            console.log(`Published message to ${exchange}:${routingKey} with ${delay ? delay + 'ms delay' : 'no delay'}`);
+            });
+            this.amqpConnection.channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(message)));
+            console.log(`Published message to ${exchange}:${routingKey} with no delay`);
         });
     }
     subscribe(topic, routingKey, queueName, onMessage) {
         return __awaiter(this, void 0, void 0, function* () {
             const exchange = exchangeMap_1.exchangeMap[topic];
-            const exchangeType = topic === types_1.PubSubTopic.DELAYED_TRIGGERS ? 'x-delayed-message' : 'topic';
-            const options = { durable: true };
-            if (exchangeType === 'x-delayed-message') {
-                options.arguments = { 'x-delayed-type': 'topic' };
-            }
-            yield this.amqpConnection.channel.assertExchange(exchange, exchangeType, options);
+            yield this.amqpConnection.channel.assertExchange(exchange, 'topic', {
+                durable: true,
+            });
             yield this.amqpConnection.channel.assertQueue(queueName, { durable: true });
             yield this.amqpConnection.channel.bindQueue(queueName, exchange, routingKey);
             this.amqpConnection.channel.consume(queueName, (msg) => {
