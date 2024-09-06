@@ -1,4 +1,4 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Module, OnModuleInit, Global } from '@nestjs/common';
 import { RabbitMQClient } from './rabbitmq.client';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import '../../config';
@@ -9,6 +9,7 @@ const port = parseInt(process.env.RABBITMQ_PORT ?? '5672', 10);
 const username = process.env.RABBITMQ_USERNAME ?? 'guest';
 const password = process.env.RABBITMQ_PASSWORD ?? 'guest';
 
+@Global()
 @Module({
   imports: [
     RabbitMQModule.forRoot(RabbitMQModule, {
@@ -38,6 +39,8 @@ export class RabbitMQCustomModule implements OnModuleInit {
   constructor(private readonly rabbitMQClient: RabbitMQClient) {}
 
   async onModuleInit() {
+    console.log('Setting up RabbitMQ');
+
     await this.rabbitMQClient.setupQueues();
   }
 }

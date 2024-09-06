@@ -35,11 +35,13 @@ let RabbitMQCustomModule = class RabbitMQCustomModule {
     }
     onModuleInit() {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('Setting up RabbitMQ');
             yield this.rabbitMQClient.setupQueues();
         });
     }
 };
 RabbitMQCustomModule = __decorate([
+    (0, common_1.Global)(),
     (0, common_1.Module)({
         imports: [
             nestjs_rabbitmq_1.RabbitMQModule.forRoot(nestjs_rabbitmq_1.RabbitMQModule, {
