@@ -40,7 +40,7 @@ export class RabbitMQClient {
     topic: T,
     routingKey: string,
     queueName: string,
-    onMessage: (msg: any) => void,
+    onMessage: (msg: any) => Promise<void>,
     delayTime: number,
   ) {
     try {
@@ -70,15 +70,14 @@ export class RabbitMQClient {
       // Start consuming messages
       this.amqpConnection.channel.consume(
         'delay-queue-process',
-        (msg) => {
+        async (msg) => {
           if (msg) {
             try {
               const message = JSON.parse(msg.content.toString());
-              onMessage(message);
+              await onMessage(message);
               this.amqpConnection.channel.ack(msg);
             } catch (error) {
-              console.error('Error processing message:', error);
-              this.amqpConnection.channel.nack(msg, false, false);
+              this.amqpConnection.channel.ack(msg);
             }
           }
         },
@@ -130,7 +129,7 @@ export class RabbitMQClient {
     topic: T,
     routingKey: string,
     queueName: string,
-    onMessage: (msg: any) => void,
+    onMessage: (msg: any) => Promise<void>,
   ) {
     const exchange = exchangeMap[topic];
     await this.amqpConnection.channel.assertExchange(exchange, 'topic', {
@@ -144,11 +143,15 @@ export class RabbitMQClient {
     );
     this.amqpConnection.channel.consume(
       queueName,
-      (msg) => {
+      async (msg) => {
         if (msg) {
-          const message = JSON.parse(msg.content.toString());
-          onMessage(message);
-          this.amqpConnection.channel.ack(msg);
+          try {
+            const message = JSON.parse(msg.content.toString());
+            await onMessage(message);
+            this.amqpConnection.channel.ack(msg);
+          } catch (e) {
+            this.amqpConnection.channel.ack(msg);
+          }
         }
       },
       { noAck: false },

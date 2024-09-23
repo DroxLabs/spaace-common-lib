@@ -30,6 +30,7 @@ const password = process.env.RABBITMQ_PASSWORD ?? 'guest';
       connectionManagerOptions: {
         heartbeatIntervalInSeconds: 60,
       },
+      prefetchCount: 3,
     }),
   ],
   providers: [RabbitMQClient],

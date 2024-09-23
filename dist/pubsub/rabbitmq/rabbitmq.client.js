@@ -69,19 +69,18 @@ let RabbitMQClient = class RabbitMQClient {
                 // Bind the queue to the exchange
                 yield this.amqpConnection.channel.bindQueue(queueName, exchange, routingKey);
                 // Start consuming messages
-                this.amqpConnection.channel.consume('delay-queue-process', (msg) => {
+                this.amqpConnection.channel.consume('delay-queue-process', (msg) => __awaiter(this, void 0, void 0, function* () {
                     if (msg) {
                         try {
                             const message = JSON.parse(msg.content.toString());
-                            onMessage(message);
+                            yield onMessage(message);
                             this.amqpConnection.channel.ack(msg);
                         }
                         catch (error) {
-                            console.error('Error processing message:', error);
-                            this.amqpConnection.channel.nack(msg, false, false);
+                            this.amqpConnection.channel.ack(msg);
                         }
                     }
-                }, { noAck: false });
+                }), { noAck: false });
                 console.log(`Subscribed to ${exchange}:${routingKey} with queue ${queueName} and delay ${delayTime} ms`);
             }
             catch (error) {
@@ -117,13 +116,18 @@ let RabbitMQClient = class RabbitMQClient {
             });
             yield this.amqpConnection.channel.assertQueue(queueName, { durable: true });
             yield this.amqpConnection.channel.bindQueue(queueName, exchange, routingKey);
-            this.amqpConnection.channel.consume(queueName, (msg) => {
+            this.amqpConnection.channel.consume(queueName, (msg) => __awaiter(this, void 0, void 0, function* () {
                 if (msg) {
-                    const message = JSON.parse(msg.content.toString());
-                    onMessage(message);
-                    this.amqpConnection.channel.ack(msg);
+                    try {
+                        const message = JSON.parse(msg.content.toString());
+                        yield onMessage(message);
+                        this.amqpConnection.channel.ack(msg);
+                    }
+                    catch (e) {
+                        this.amqpConnection.channel.ack(msg);
+                    }
                 }
-            }, { noAck: false });
+            }), { noAck: false });
             console.log(`Subscribed to ${exchange}:${routingKey} with queue ${queueName}`);
         });
     }
