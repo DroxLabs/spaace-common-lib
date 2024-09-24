@@ -62,7 +62,7 @@ RabbitMQCustomModule = __decorate([
                 connectionManagerOptions: {
                     heartbeatIntervalInSeconds: 60,
                 },
-                prefetchCount: 3,
+                prefetchCount: 5,
             }),
         ],
         providers: [rabbitmq_client_1.RabbitMQClient],
