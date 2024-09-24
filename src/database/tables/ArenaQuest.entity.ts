@@ -24,6 +24,7 @@ export enum ArenaQuestTrigger {
   USER_LEVEL_PROGRESS = 'USER_LEVEL_PROGRESS',
   CREW_PROGRESS = 'CREW_PROGRESS',
   SOCIAL_CREW = 'SOCIAL_CREW',
+  USER_SPECIAL = 'USER_SPECIAL',
 }
 
 registerEnumType(ArenaQuestTrigger, {

@@ -12,18 +12,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ArenaCrewLeaderBoard = void 0;
 const graphql_1 = require("@nestjs/graphql");
 const typeorm_1 = require("typeorm");
+const ArenaCrew_entity_1 = require("./ArenaCrew.entity");
 let ArenaCrewLeaderBoard = class ArenaCrewLeaderBoard extends typeorm_1.BaseEntity {
 };
 __decorate([
     (0, graphql_1.Field)(() => String),
     (0, typeorm_1.PrimaryColumn)('text'),
+    (0, typeorm_1.OneToOne)(() => ArenaCrew_entity_1.ArenaCrew),
+    (0, typeorm_1.JoinColumn)({ name: 'crewName', referencedColumnName: 'name' }),
     __metadata("design:type", String)
 ], ArenaCrewLeaderBoard.prototype, "crewName", void 0);
 __decorate([
     (0, graphql_1.Field)(() => String),
     (0, typeorm_1.Column)('numeric', { precision: 78, unsigned: true, default: '0' }),
+    (0, typeorm_1.Index)(),
     __metadata("design:type", String)
-], ArenaCrewLeaderBoard.prototype, "position", void 0);
+], ArenaCrewLeaderBoard.prototype, "rank", void 0);
 ArenaCrewLeaderBoard = __decorate([
     (0, graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)({ name: 'arena_crew_leaderboard' })

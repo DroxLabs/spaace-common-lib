@@ -11,4 +11,4 @@ export type ArenaPubSubData<T extends ArenaQuestTrigger> = T extends ArenaQuestT
 } : T extends ArenaQuestTrigger.SOCIAL_PRIME ? ArenaTweet : T extends ArenaQuestTrigger.SOCIAL_CREW ? ArenaUser & {
     tweetId?: string;
     action?: string;
-} : never;
+} : T extends ArenaQuestTrigger.USER_SPECIAL ? ArenaUser : never;

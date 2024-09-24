@@ -9,27 +9,33 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ArenaGlobalLeaderBoard = void 0;
+exports.ArenaUserLeaderBoard = void 0;
 const graphql_1 = require("@nestjs/graphql");
 const typeorm_1 = require("typeorm");
 const ArenaUser_entity_1 = require("./ArenaUser.entity");
-let ArenaGlobalLeaderBoard = class ArenaGlobalLeaderBoard extends typeorm_1.BaseEntity {
+let ArenaUserLeaderBoard = class ArenaUserLeaderBoard extends typeorm_1.BaseEntity {
 };
 __decorate([
     (0, graphql_1.Field)(() => String),
     (0, typeorm_1.PrimaryColumn)('text'),
-    (0, typeorm_1.ManyToOne)(() => ArenaUser_entity_1.ArenaUser),
-    (0, typeorm_1.JoinColumn)({ name: 'userTwitter', referencedColumnName: 'userTwitterId' }),
+    (0, typeorm_1.OneToOne)(() => ArenaUser_entity_1.ArenaUser),
+    (0, typeorm_1.JoinColumn)({ name: 'userTwitterId', referencedColumnName: 'userTwitterId' }),
     __metadata("design:type", String)
-], ArenaGlobalLeaderBoard.prototype, "userTwitter", void 0);
+], ArenaUserLeaderBoard.prototype, "userTwitterId", void 0);
+__decorate([
+    (0, graphql_1.Field)(() => String),
+    (0, typeorm_1.Column)('numeric', { precision: 78, unsigned: true, default: '0' }),
+    (0, typeorm_1.Index)(),
+    __metadata("design:type", String)
+], ArenaUserLeaderBoard.prototype, "rank", void 0);
 __decorate([
     (0, graphql_1.Field)(() => String),
     (0, typeorm_1.Column)('numeric', { precision: 78, unsigned: true, default: '0' }),
     __metadata("design:type", String)
-], ArenaGlobalLeaderBoard.prototype, "position", void 0);
-ArenaGlobalLeaderBoard = __decorate([
+], ArenaUserLeaderBoard.prototype, "leagueRank", void 0);
+ArenaUserLeaderBoard = __decorate([
     (0, graphql_1.ObjectType)(),
-    (0, typeorm_1.Entity)({ name: 'arena_global_leaderboard' })
-], ArenaGlobalLeaderBoard);
-exports.ArenaGlobalLeaderBoard = ArenaGlobalLeaderBoard;
-//# sourceMappingURL=ArenaGlobalLeaderBoard.entity.js.map
+    (0, typeorm_1.Entity)({ name: 'arena_user_leaderboard' })
+], ArenaUserLeaderBoard);
+exports.ArenaUserLeaderBoard = ArenaUserLeaderBoard;
+//# sourceMappingURL=ArenaUserLeaderBoard.entity.js.map
