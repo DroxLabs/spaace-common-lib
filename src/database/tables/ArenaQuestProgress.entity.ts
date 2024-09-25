@@ -2,11 +2,11 @@ import {
   BaseEntity,
   Column,
   Entity,
+  Generated,
   Index,
   JoinColumn,
   ManyToOne,
   PrimaryColumn,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import { Field, ObjectType } from '@nestjs/graphql';
@@ -38,7 +38,7 @@ export class ArenaQuestProgress extends BaseEntity {
   seasonNumber!: string;
 
   @Field(() => String)
-  @PrimaryGeneratedColumn('uuid')
+  @Generated('uuid')
   nonce!: string;
 
   @Field(() => [[String]])
