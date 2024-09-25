@@ -2,7 +2,6 @@ import {
   BaseEntity,
   Column,
   Entity,
-  Generated,
   Index,
   JoinColumn,
   ManyToOne,
@@ -36,10 +35,6 @@ export class ArenaQuestProgress extends BaseEntity {
   @ManyToOne(() => ArenaSeason)
   @JoinColumn({ name: 'seasonNumber', referencedColumnName: 'number' })
   seasonNumber!: string;
-
-  @Field(() => String)
-  @Generated('uuid')
-  nonce!: string;
 
   @Field(() => [[String]])
   @Column('jsonb')
