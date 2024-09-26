@@ -3,7 +3,6 @@ export declare class ArenaQuestProgress extends BaseEntity {
     userTwitterId: string;
     questId: string;
     seasonNumber: string;
-    nonce: string;
     data: string[][];
     completed: boolean;
     timestamp: Date;

@@ -6,7 +6,6 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryColumn,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import { Field, ObjectType } from '@nestjs/graphql';
@@ -36,10 +35,6 @@ export class ArenaQuestProgress extends BaseEntity {
   @ManyToOne(() => ArenaSeason)
   @JoinColumn({ name: 'seasonNumber', referencedColumnName: 'number' })
   seasonNumber!: string;
-
-  @Field(() => String)
-  @PrimaryGeneratedColumn('uuid')
-  nonce!: string;
 
   @Field(() => [[String]])
   @Column('jsonb')

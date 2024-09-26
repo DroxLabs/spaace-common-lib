@@ -41,11 +41,6 @@ __decorate([
     __metadata("design:type", String)
 ], ArenaQuestProgress.prototype, "seasonNumber", void 0);
 __decorate([
-    (0, graphql_1.Field)(() => String),
-    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
-    __metadata("design:type", String)
-], ArenaQuestProgress.prototype, "nonce", void 0);
-__decorate([
     (0, graphql_1.Field)(() => [[String]]),
     (0, typeorm_1.Column)('jsonb'),
     __metadata("design:type", Array)
