@@ -13,7 +13,7 @@ import { AreanaQuest, ArenaSeason, ArenaUser } from '.';
 
 @ObjectType()
 @Entity({ name: 'arena_quest_progress' })
-@Index(['userTwitterId', 'seasonNumber', 'questId'], { where: '"completed"' })
+@Index(['userTwitterId', 'seasonNumber', 'questId'])
 export class ArenaQuestProgress extends BaseEntity {
   @Field(() => String)
   @PrimaryColumn('text')

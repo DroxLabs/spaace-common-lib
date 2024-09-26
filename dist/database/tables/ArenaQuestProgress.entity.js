@@ -58,7 +58,7 @@ __decorate([
 ArenaQuestProgress = __decorate([
     (0, graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)({ name: 'arena_quest_progress' }),
-    (0, typeorm_1.Index)(['userTwitterId', 'seasonNumber', 'questId'], { where: '"completed"' })
+    (0, typeorm_1.Index)(['userTwitterId', 'seasonNumber', 'questId'])
 ], ArenaQuestProgress);
 exports.ArenaQuestProgress = ArenaQuestProgress;
 //# sourceMappingURL=ArenaQuestProgress.entity.js.map
