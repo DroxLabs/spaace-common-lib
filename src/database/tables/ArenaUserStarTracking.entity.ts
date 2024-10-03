@@ -12,6 +12,7 @@ import { ArenaUser } from '.';
 
 @ObjectType()
 @Entity({ name: 'arena_user_stars_tracking' })
+@Index(['userTwitterId'])
 export class ArenaUserStarTracking extends BaseEntity {
   @Field(() => String)
   @PrimaryGeneratedColumn('uuid')
