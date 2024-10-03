@@ -40,8 +40,7 @@ __decorate([
 ], ArenaUserStarTracking.prototype, "timestamp", void 0);
 ArenaUserStarTracking = __decorate([
     (0, graphql_1.ObjectType)(),
-    (0, typeorm_1.Entity)({ name: 'arena_user_stars_tracking' }),
-    (0, typeorm_1.Index)(['userTwitterId'])
+    (0, typeorm_1.Entity)({ name: 'arena_user_stars_tracking' })
 ], ArenaUserStarTracking);
 exports.ArenaUserStarTracking = ArenaUserStarTracking;
 //# sourceMappingURL=ArenaUserStarTracking.entity.js.map
