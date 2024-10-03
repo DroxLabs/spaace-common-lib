@@ -24,9 +24,9 @@ export class ArenaUserStarTracking extends BaseEntity {
   @JoinColumn({ name: 'userTwitterId', referencedColumnName: 'userTwitterId' })
   userTwitterId!: string;
 
-  @Field(() => String)
+  @Field(() => Number)
   @Column('numeric', { precision: 78, unsigned: true, default: '1' })
-  stars!: string;
+  stars!: number;
 
   @Field(() => Date)
   @Column('timestamp without time zone', { default: () => 'CURRENT_TIMESTAMP' })
