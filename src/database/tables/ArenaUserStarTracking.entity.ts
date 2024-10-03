@@ -25,7 +25,7 @@ export class ArenaUserStarTracking extends BaseEntity {
   userTwitterId!: string;
 
   @Field(() => String)
-  @Column('numeric', { precision: 78, unsigned: true, default: '0' })
+  @Column('numeric', { precision: 78, unsigned: true, default: '1' })
   stars!: string;
 
   @Field(() => Date)

@@ -30,7 +30,7 @@ __decorate([
 ], ArenaUserStarTracking.prototype, "userTwitterId", void 0);
 __decorate([
     (0, graphql_1.Field)(() => String),
-    (0, typeorm_1.Column)('numeric', { precision: 78, unsigned: true, default: '0' }),
+    (0, typeorm_1.Column)('numeric', { precision: 78, unsigned: true, default: '1' }),
     __metadata("design:type", String)
 ], ArenaUserStarTracking.prototype, "stars", void 0);
 __decorate([
